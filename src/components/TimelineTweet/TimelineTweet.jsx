@@ -1,17 +1,18 @@
 import React, { useEffect, useState } from "react";
-import Tweet from "../Tweet/Tweet";
-import { useSelector } from "react-redux";
 import axios from "axios";
+import { useSelector } from "react-redux";
+import Tweet from "../Tweet/Tweet";
 
-const Explore = () => {
-  const [explore, setExplore] = useState(null);
+const TimelineTweet = () => {
+  const [timeline, setTimeline] = useState(null);
+
   const { currentUser } = useSelector((state) => state.user);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const exploreTweet = await axios.get("/tweets/explore");
-        setExplore(exploreTweet.data);
+        const timelineTweet = await axios.get(`/tweets/timeline/${currentUser._id}`);
+        setTimeline(timelineTweet.data);
       } catch (err) {
         console.log("error", err);
       }
@@ -22,14 +23,14 @@ const Explore = () => {
 
   return (
     <div className="mt-6">
-      {explore &&
-        explore.map((tweet) => (
+      {timeline &&
+        timeline.map((tweet) => (
           <div key={tweet._id} className="p-2">
-            <Tweet tweet={tweet} setData={setExplore} />
+            <Tweet tweet={tweet} setData={setTimeline} />
           </div>
         ))}
     </div>
   );
 };
 
-export default Explore;
+export default TimelineTweet;

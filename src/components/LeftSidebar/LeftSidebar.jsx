@@ -5,9 +5,20 @@ import HomeIcon from "@mui/icons-material/Home";
 import TagIcon from "@mui/icons-material/Tag";
 import PersonIcon from "@mui/icons-material/Person";
 
+import { useDispatch, useSelector } from "react-redux";
+import { logout } from "../../redux/userSlice";
+
 const LeftSidebar = () => {
+  const dispatch = useDispatch();
+
+  const handleLogout = () => {
+    dispatch(logout());
+  };
+
+  const { currentUser } = useSelector((state) => state.user);
+
   return (
-    <div className="flex flex-col h-full md:h-[90vh] justify-between mr-6">
+    <div className="flex flex-col h-full justify-between md:h-[90vh] mr-6">
       <div className="mt-6 flex flex-col space-y-4">
         <Link to="/">
           <div className="flex items-center space-x-6 px-2 py-2 hover:bg-slate-200 rounded-full cursor-pointer">
@@ -21,7 +32,7 @@ const LeftSidebar = () => {
             <p>Explore</p>
           </div>
         </Link>
-        <Link to="/profile/:id">
+        <Link to={`/profile/${currentUser._id}`}>
           <div className="flex items-center space-x-6 px-2 py-2 hover:bg-slate-200 rounded-full cursor-pointer">
             <PersonIcon fontSize="large" />
             <p>Profile</p>
@@ -31,12 +42,14 @@ const LeftSidebar = () => {
 
       <div className="flex justify-between">
         <div>
-          <p className="font-bold">Username</p>
-          <p className="font-bold">@username</p>
+          <p className="font-bold">{currentUser.username}</p>
+          <p className="font-bold">@{currentUser.username}</p>
         </div>
         <div>
           <Link to="/signin">
-            <button className="bg-red-500 px-4 py-2 text-white rounded-full"> Log Out</button>
+            <button onClick={handleLogout} className="bg-red-500 px-4 py-2 text-white rounded-full">
+              Log Out
+            </button>
           </Link>
         </div>
       </div>
